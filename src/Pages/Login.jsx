@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaLock, FaEnvelope, FaLockOpen } from "react-icons/fa";
 import { AuthContext } from "../Provider/AuthProvider";
@@ -6,7 +6,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [show, setShow] = useState(true);
-  const { signIn } = useContext(AuthContext);
+  const { signIn, resetPassword } = useContext(AuthContext);
+  const getEmail = useRef();
 
   const handleSignIn = (event) => {
     event.preventDefault();
@@ -14,8 +15,23 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
     signIn(email, password)
-      .then((res) => toast.success("Your login has successful"))
+      .then((res) => {
+        if (!res.user.emailVerified) {
+          return toast.error("Your email is not verified yet");
+        }
+        toast.success("Your login has successful");
+      })
       .catch((error) => toast.error(error.message.split("/")[1]));
+  };
+  const handleForgetPassword = () => {
+    // console.log(getEmail.current.value);
+    if (!getEmail.current.value) {
+      return toast.error("Enter your email first!!!!");
+    }
+
+    resetPassword(getEmail.current.value).then(() =>
+      toast.success("A reset email has send to your mail")
+    );
   };
   return (
     <div className="md:w-4/5  mx-auto my-4 border text-center">
@@ -29,6 +45,7 @@ const Login = () => {
               <FaEnvelope />
             </span>
             <input
+              ref={getEmail}
               type="email"
               name="email"
               placeholder="Enter your email"
@@ -50,7 +67,12 @@ const Login = () => {
               className="input px-12 w-full my-2 bg-gray-100"
             />
           </div>
-
+          <div>
+            <br />
+            <Link onClick={handleForgetPassword} className="my-4 btn-link">
+              Forget password?
+            </Link>
+          </div>
           <div className="">
             <p className="my-4">
               <small>

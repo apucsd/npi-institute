@@ -43,7 +43,7 @@ const Register = () => {
         toast.success("Your account has created successfully");
         sendEmailVerification(res.user);
       })
-      .catch((error) => toast.error(err.message.split("/")[1]));
+      .catch((error) => toast.error(error.message.split("/")[1]));
   };
   const handleFacebookSignIn = () => {};
   return (
@@ -117,7 +117,7 @@ const Register = () => {
           <div>
             <button
               onClick={handleGoogleSignIn}
-              className="btn-outline border px-8 rounded  py-3"
+              className="btn-outline border px-8 w-2/3 rounded  py-3"
             >
               <span className="flex items-center gap-2">
                 <span className="text-blue-600 text-xl">
@@ -130,14 +130,13 @@ const Register = () => {
 
             <button
               onClick={handleFacebookSignIn}
-              className="btn-outline my-2 border px-8 rounded  py-3"
+              className="btn-outline my-2 border w-2/3 px-8 rounded  py-3"
             >
               <span className="flex items-center gap-2">
                 <span className="text-blue-600 text-xl">
-                  {" "}
-                  <FaFacebook />{" "}
-                </span>{" "}
-                Register with Google
+                  <FaFacebook />
+                </span>
+                Register with Facebook
               </span>
             </button>
           </div>
